@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
 import java.util.HashMap;
 
 public final class AliveTime extends JavaPlugin {
@@ -20,11 +21,21 @@ public final class AliveTime extends JavaPlugin {
     public HashMap<Player, Double> playerTimes = new HashMap<>();
     // private ArrayList<Player> already_got_achievement = new ArrayList<>();
     public Object permsAPI;
+    public CfgManager configManager;
 
     @Override
     public void onEnable() {
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (configFile.exists()) {
+            getConfig().options().copyDefaults(true);
+        }
+        saveDefaultConfig();
+
+        configManager = new CfgManager();
+        configManager.setup();
+        configManager.savePlayers();
+        configManager.reloadPlayers();
+
         Bukkit.getPluginManager().registerEvents(new JoinLeave(), this);
         Bukkit.getPluginManager().registerEvents(new Die(), this);
         getCommand("alivetime").setExecutor(new AliveTimeCommand());
@@ -44,9 +55,9 @@ public final class AliveTime extends JavaPlugin {
     @Override
     public void onDisable() {
         for(Player player: playerTimes.keySet()) {
-            getConfig().set("Players." + player.getUniqueId() + ".Time", playerTimes.get(player));
+            configManager.getPlayers().set(player.getUniqueId() + ".Time", playerTimes.get(player));
         }
-        saveConfig();
+        configManager.savePlayers();
     }
 
     private void countPlayerTimes() {
@@ -66,12 +77,12 @@ public final class AliveTime extends JavaPlugin {
                         }
                     }
 
-                    if(getConfig().getBoolean("Config.Achievement.Set-Group") && Utils.getPlayerAliveTime(player) > Utils.parseConfigAchievementStringToSeconds() && !getConfig().getBoolean("Players." + player.getUniqueId() + ".Achievement")) {
+                    if(getConfig().getBoolean("Config.Achievement.Set-Group") && Utils.getPlayerAliveTime(player) > Utils.parseConfigAchievementStringToSeconds() && !configManager.getPlayers().getBoolean(player.getUniqueId() + ".Achievement")) {
                         Utils.setPlayerGroup(player, getConfig().getString("Config.Achievement.Group"));
                         player.sendMessage(getConfig().getString("Messages.Achievement-Completed").replace("%time%", Utils.formatTime(Utils.parseConfigAchievementStringToSeconds())).replace("%group%", getConfig().getString("Config.Achievement.Group")));
                         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
-                        getConfig().set("Players." + player.getUniqueId() + ".Achievement", true);
-                        saveConfig();
+                        configManager.getPlayers().set(player.getUniqueId() + ".Achievement", true);
+                        configManager.savePlayers();
                     }
                 }
                 // System.out.println(playerTimes.toString());
@@ -85,9 +96,9 @@ public final class AliveTime extends JavaPlugin {
             @Override
             public void run() {
                 for(Player player: playerTimes.keySet()) {
-                    getConfig().set("Players." + player.getUniqueId() + ".Time", playerTimes.get(player));
+                    configManager.getPlayers().set(player.getUniqueId() + ".Time", playerTimes.get(player));
                 }
-                saveConfig();
+                configManager.savePlayers();
             }
         }.runTaskTimerAsynchronously(this, 0L, 6000L);
     }

@@ -17,12 +17,12 @@ public class Utils {
         if(plugin.playerTimes.containsKey(player)) {
             return plugin.playerTimes.get(player);
         } else {
-            return plugin.getConfig().getDouble("Players." + player.getUniqueId() + ".Time");
+            return plugin.configManager.getPlayers().getDouble(player.getUniqueId() + ".Time");
         }
     }
 
     public static void clearPlayerAliveTime(Player player) {
-        double highscore = plugin.getConfig().getLong("Players." + player.getUniqueId() + ".Highscore");
+        double highscore = plugin.configManager.getPlayers().getLong(player.getUniqueId() + ".Highscore");
         double playerTime = getPlayerAliveTime(player);
         if(playerTime > highscore) { // Check if current time is higher than their Highscore
             setPlayerHighscore(player, playerTime); // Update Highscore
@@ -32,18 +32,18 @@ public class Utils {
             plugin.playerTimes.replace(player, 0.0);
         }
 
-        plugin.getConfig().set("Players." + player.getUniqueId() + ".Achievement", false);
-        plugin.saveConfig();
+        plugin.configManager.getPlayers().set(player.getUniqueId() + ".Achievement", false);
+        plugin.configManager.savePlayers();
 
     }
 
     private static void setPlayerHighscore(Player player, double score) {
-        plugin.getConfig().set("Players." + player.getUniqueId() + ".Highscore", score);
-        plugin.saveConfig();
+        plugin.configManager.getPlayers().set(player.getUniqueId() + ".Highscore", score);
+        plugin.configManager.savePlayers();
     }
 
     public static double getPlayerHighscore(Player player) {
-        double configTime = plugin.getConfig().getDouble("Players." + player.getUniqueId() + ".Highscore");
+        double configTime = plugin.configManager.getPlayers().getDouble(player.getUniqueId() + ".Highscore");
         double mapTime = 0;
         try {
             mapTime = plugin.playerTimes.get(player);

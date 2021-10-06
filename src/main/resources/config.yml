@@ -1,0 +1,34 @@
+# AliveTime Plugin made by Lysander12 (xlysander12)
+# Source Code available at GitHub (https://github.com/xlysander12/AliveTimePlugin)
+# Found a bug? Open an Issue in https://github.com/xlysander12/AliveTimePlugin/issues
+# Implemented a cool feature? Open a Pull Request in https://github.com/xlysander12/AliveTimePlugin/pulls
+# Got any doubt? Contact me on discord: Lysander™#0029 (285084565469528064)
+######################################################################################################################################################
+# Permissions list:
+# - alivetime.time # Necessary permission to use the command "alivetime" on self
+# - alivetime.time.others # Necessary permission to use the command "alivetime" on other players
+# - alivetime.highscore # Necessary permission to use the command "highscore" on self
+# - alivetime.highscore.others # Necessary permission to use the command "highscore" on other players
+######################################################################################################################################################
+# Basic Information:
+# - This plugin only supports LuckPerms (https://luckperms.net/) for the Achievement feature. (For now, at least)
+# - This plugin makes use of PlaceholderAPI. Use the placeholders "%alivetime_alivetime%" and "%alivetime_highscore%" to get it replaced by its values
+######################################################################################################################################################
+Config:
+  Show-Alive-Time-On-Dead: true # Send a message to the player when they die informing how much time they lived
+  Show-New-Highscore-On-Dead: true # Send a message to the player when they die informing they beat their highscore, if they did.
+  Achievement:
+    Set-Group: true # Add a group from LuckPerms when a player lives for certain amount of time defined in "Time"
+    Group: "survivor" # What group should be added
+    Time: "10:09:08:07" # How much time should have the player lived for to receive the group. Default value is equal to 10 days, 9 hours, 8 minutes and 7 seconds
+    Remove-On-Death: true # Whether to remove the group when the player dies
+    Send-Message: true # Whether to send a message when the player gets the achievement
+Messages:
+  Death-Message: "§2You were alive for %time%" # Message to be sent to player when they die (Only if Show-Alive-Time-On-Dead is enabled)
+  Death-Message-Highscore: "§aYou just beat your last highscore of %old_highscore%" # Message to be sent to player when they beat their highscore (Only if Show-New-Highscore-On-Dead is enabled)
+  Not-Player: "§cYou are not a player!" # Message to be sent when the console tries to get its AliveTime or Highscore
+  Player-Not-Found: "§cPlayer not found!" # Message to be sent when the player was not found in "alivetime" and "highscore" commands
+  Alivetime-Command: "§e%player% has been alive for %time%" # Message to be sent as output of command "alivetime"
+  Highscore-Command: "§e%player%'s highscore: %highscore%" # Message to be sent as output of command "highscore"
+  No-Permission: "§cYou don't have permission to do that!" # Message to be sent when player doesn't have required permissions to execute a command
+  Achievement-Completed: "§aCongratulations. You have survived for §2%time%§a and were granted the group §2%group%" # Message to be sent when a player gets the achievement (Only if Achievement.Send-Message is enabled)

@@ -1,0 +1,12 @@
+name: AliveTime
+version: '${project.version}'
+main: me.xlysander12.alivetime.AliveTime
+api-version: 1.17
+authors: [ xlysander12 ]
+description: Plugin to count the amount of time every player has been alive for
+softdepend:
+  - PlaceholderAPI
+  - LuckPerms
+commands:
+  alivetime:
+  highscore:

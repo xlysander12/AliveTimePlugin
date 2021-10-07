@@ -2,6 +2,7 @@ package me.xlysander12.alivetime.events;
 
 import me.xlysander12.alivetime.AliveTime;
 import me.xlysander12.alivetime.Utils;
+import me.xlysander12.alivetime.models.Achievement;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -21,8 +22,10 @@ public class Die implements Listener {
         }
         Utils.clearPlayerAliveTime(event.getEntity());
 
-        if(plugin.getConfig().getBoolean("Config.Achievement.Remove-On-Death")) {
-            Utils.removePlayerGorup(event.getEntity(), plugin.getConfig().getString("Config.Achievement.Group"));
+        if(plugin.getConfig().getBoolean("Config.Achievements.Remove-On-Death")) {
+            for(Achievement achievement: plugin.achievements) {
+                Utils.removePlayerGroup(event.getEntity(), achievement.getGroupname());
+            }
         }
     }
 }

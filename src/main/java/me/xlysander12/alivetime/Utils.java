@@ -32,7 +32,13 @@ public class Utils {
             plugin.playerTimes.replace(player, 0.0);
         }
 
-        plugin.configManager.getPlayers().set(player.getUniqueId() + ".Achievement", false);
+        for(int i = 1; true; i++) {
+            if(!plugin.configManager.getPlayers().getBoolean(player.getUniqueId() + ".Achievements." + i)) {
+                break;
+            }
+
+            plugin.configManager.getPlayers().set(player.getUniqueId() + ".Achievements." + i, false);
+        }
         plugin.configManager.savePlayers();
 
     }
@@ -89,7 +95,7 @@ public class Utils {
         });
     }
 
-    public static void removePlayerGorup(Player player, String groupname) {
+    public static void removePlayerGroup(Player player, String groupname) {
         Group group = ((LuckPerms) plugin.permsAPI).getGroupManager().getGroup(groupname);
         if(group == null) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Couldn't find the group " + ChatColor.DARK_RED + groupname + ChatColor.RED + ". Make sure you spell it right in the config.yml");
@@ -102,11 +108,10 @@ public class Utils {
         });
     }
 
-    public static double parseConfigAchievementStringToSeconds() {
-        String configString = plugin.getConfig().getString("Config.Achievement.Time");
+    public static double parseConfigAchievementStringToSeconds(String time) {
         double seconds = 0;
         int i = 0;
-        for(String sub: configString.split(":")) {
+        for(String sub: time.split(":")) {
             switch (i++) {
                 case 0:
                     seconds += Integer.parseInt(sub) * 86400;

@@ -17,12 +17,15 @@
 Config:
   Show-Alive-Time-On-Dead: true # Send a message to the player when they die informing how much time they lived
   Show-New-Highscore-On-Dead: true # Send a message to the player when they die informing they beat their highscore, if they did.
-  Achievement:
+  Achievements:
     Set-Group: true # Add a group from LuckPerms when a player lives for certain amount of time defined in "Time"
-    Group: "survivor" # What group should be added
-    Time: "10:09:08:07" # How much time should have the player lived for to receive the group. Default value is equal to 10 days, 9 hours, 8 minutes and 7 seconds
     Remove-On-Death: true # Whether to remove the group when the player dies
-    Send-Message: true # Whether to send a message when the player gets the achievement
+    Replace-Group: false # Whether to replace the Group from the last achievement or keep it and just add the new one
+    ## It is advisable that you add the achievements in increasing order of time or things might break. What I mean with this is: Achievement 1 should be gotten before Achievement 2 and so on...
+    1: # This is the sample Achievement. Copy+Past this and increase the number to add more Achievements
+      Group: "survivor" # What group should be given
+      Time: "10:09:08:07" # How much time should have the player lived for to receive the group. Default value is equal to 10 days, 9 hours, 8 minutes and 7 seconds
+      Send-Message: true # Whether to send a message when the player gets the achievement
 Messages:
   Death-Message: "§2You were alive for %time%" # Message to be sent to player when they die (Only if Show-Alive-Time-On-Dead is enabled)
   Death-Message-Highscore: "§aYou just beat your last highscore of %old_highscore%" # Message to be sent to player when they beat their highscore (Only if Show-New-Highscore-On-Dead is enabled)
